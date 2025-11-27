@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xử Lý Sự Cố</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Quay lại trang chủ</a>
+        
+        <h1 style="color: white; text-align: center; margin-bottom: 40px;">Xử Lý Sự Cố</h1>
+        
+        <% if (tickets.length === 0) { %>
+            <div class="form-container" style="text-align: center; padding: 60px 40px;">
+                <p style="font-size: 1.2em; color: #666;">Không có ticket nào cần xử lý</p>
+                <a href="/send" class="btn btn-primary" style="margin-top: 20px;">Tạo Ticket Mới</a>
+            </div>
+        <% } else { %>
+            <% tickets.forEach(ticket => { %>
+                <div class="ticket-card">
+                    <div class="ticket-header">
+                        <h2 style="color: #333; margin: 0;">Ticket #<%= ticket.id %></h2>
+                        <div>
+                            <span class="status-badge status-<%= ticket.status %>">
+                                <%= ticket.status === 'open' ? 'Chưa xử lý' : ticket.status === 'in_progress' ? 'Đang xử lý' : 'Hoàn thành' %>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ticket-info">
+                        <div class="info-item">
+                            <span class="info-label">Khu vực</span>
+                            <span class="info-value"><%= ticket.area %></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Thiết bị</span>
+                            <span class="info-value"><%= ticket.equipment %></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Loại công tác</span>
+                            <span class="info-value"><%= ticket.work_type %></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Thời điểm dừng</span>
+                            <span class="info-value"><%= new Date(ticket.stop_time).toLocaleString('vi-VN') %></span>
+                        </div>
+                    </div>
+
+                   
+                    <% if (ticket.status !== 'finished') { %>
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                            <button onclick="updateStatus(<%= ticket.id %>, 'in_progress')" class="btn btn-info btn-sm">
+                                Đánh dấu đang xử lý
+                            </button>
+                        </div>
+
+                        <details open>
+                            <summary style="cursor: pointer; font-weight: 600; color: #56ab2f; margin-bottom: 15px;">Cập nhật thông tin sửa chữa</summary>
+                            <form action="/fix/<%= ticket.id %>" method="POST" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 10px;">
+                                <div class="form-group">
+                                    <label for="completion_time_<%= ticket.id %>">Thời gian hoàn thành</label>
+                                    <input type="datetime-local" id="completion_time_<%= ticket.id %>" name="completion_time" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="total_processing_time_<%= ticket.id %>">Tổng thời gian xử lý</label>
+                                    <input type="text" id="total_processing_time_<%= ticket.id %>" name="total_processing_time" placeholder="Ví dụ: 2 giờ 30 phút" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="cause_recognition_<%= ticket.id %>">Ghi nhận nguyên nhân</label>
+                                    <textarea id="cause_recognition_<%= ticket.id %>" name="cause_recognition" placeholder="Ghi nhận chi tiết nguyên nhân" required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="solution_<%= ticket.id %>">Hướng xử lý khắc phục</label>
+                                    <textarea id="solution_<%= ticket.id %>" name="solution" placeholder="Mô tả cách khắc phục" required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="materials_used_<%= ticket.id %>">Vật tư sử dụng (nếu có)</label>
+                                    <textarea id="materials_used_<%= ticket.id %>" name="materials_used" placeholder="Liệt kê các vật tư đã sử dụng"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="equipment_status_after_<%= ticket.id %>">Tình trạng thiết bị sau bảo trì</label>
+                                    <textarea id="equipment_status_after_<%= ticket.id %>" name="equipment_status_after" placeholder="Mô tả tình trạng sau khi sửa chữa" required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="recommendations_<%= ticket.id %>">Đề nghị khuyến cáo</label>
+                                    <textarea id="recommendations_<%= ticket.id %>" name="recommendations" placeholder="Các khuyến cáo hoặc đề xuất"></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-success">Hoàn thành và lưu</button>
+                            </form>
+                        </details>
+                    <% } else { %>
+                        <div style="background: #d1e7dd; padding: 15px; border-radius: 8px; color: #0f5132; text-align: center;">
+                            <strong>✓ Ticket này đã được xử lý hoàn thành</strong>
+                        </div>
+                    <% } %>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
+
+    <script>
+        async function updateStatus(id, status) {
+            try {
+                const response = await fetch(`/update-status/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status })
+                });
+                
+                if (response.ok) {
+                    alert('Cập nhật trạng thái thành công!');
+                    location.reload();
+                } else {
+                    alert('Có lỗi xảy ra khi cập nhật trạng thái');
+                }
+            } catch (error) {
+                alert('Có lỗi xảy ra: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

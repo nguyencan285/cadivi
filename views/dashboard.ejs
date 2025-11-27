@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Phiếu Báo Lỗi</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .stat-open { color: #856404; }
+        .stat-progress { color: #084298; }
+        .stat-finished { color: #0f5132; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Quay lại trang chủ</a>
+        
+        <h1 style="color: white; text-align: center; margin-bottom: 40px;">Quản Lý Phiếu Báo Lỗi</h1>
+        
+        <% 
+            const openTickets = tickets.filter(t => t.status === 'open').length;
+            const inProgressTickets = tickets.filter(t => t.status === 'in_progress').length;
+            const finishedTickets = tickets.filter(t => t.status === 'finished').length;
+        %>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-label">Tổng số phiếu</div>
+                <div class="stat-number" style="color: #667eea;"><%= tickets.length %></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Chưa xử lý</div>
+                <div class="stat-number stat-open"><%= openTickets %></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Đang xử lý</div>
+                <div class="stat-number stat-progress"><%= inProgressTickets %></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Hoàn thành</div>
+                <div class="stat-number stat-finished"><%= finishedTickets %></div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h2 style="margin-bottom: 20px; color: #333;">Danh Sách Phiếu Báo Lỗi</h2>
+            
+            <% if (tickets.length === 0) { %>
+                <p style="text-align: center; color: #666; padding: 40px;">Chưa có phiếu báo lỗi nào</p>
+            <% } else { %>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Khu vực</th>
+                            <th>Thiết bị</th>
+                            <th>Loại công tác</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th>Thao tác</th>
+                              <th>Sửa</th>
+                              <th>Xuất PDF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% tickets.forEach(ticket => { %>
+                            <tr>
+                                <td><strong>#<%= ticket.id %></strong></td>
+                                <td><%= ticket.area %></td>
+                                <td><%= ticket.equipment %></td>
+                                <td><%= ticket.work_type %></td>
+                                <td>
+                                    <span class="status-badge status-<%= ticket.status %>">
+                                        <%= ticket.status === 'open' ? 'Chưa xử lý' : ticket.status === 'in_progress' ? 'Đang xử lý' : 'Hoàn thành' %>
+                                    </span>
+                                </td>
+                                <td><%= new Date(ticket.created_at).toLocaleDateString('vi-VN') %></td>
+                                <td>
+                                    <button onclick="viewDetails(<%= ticket.id %>)" class="btn btn-info btn-sm">
+                                        Chi tiết
+                                    </button>
+                                    <% if (ticket.status === 'finished') { %>
+                                        <a href="/print/<%= ticket.id %>" class="btn btn-success btn-sm" style="margin-left: 5px;">
+                                            📄 In
+                                        </a>
+                                    <% } %>
+                                </td>
+                                <td>
+                                  
+                
+           
+                <a href="/fix" class="btn btn-success">Sửa Chữa</a>
+            </div>
+                                </td>
+                            </tr>
+                            <tr id="details-<%= ticket.id %>" style="display: none;">
+                                <td colspan="7" style="background: #f8f9fa; padding: 20px;">
+                                    <h3 style="margin-bottom: 15px; color: #333;">Thông tin chi tiết Ticket #<%= ticket.id %></h3>
+                                    
+                                    <details style="margin-bottom: 20px;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #667eea; margin-bottom: 15px;">Xem chi tiết báo hỏng</summary>
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 10px;">
+                            <p><strong>Quản lý sản xuất:</strong> <%= ticket.production_manager %></p>
+                            <p><strong>CNVH Thiết bị:</strong> <%= ticket.equipment_staff %></p>
+                            <p><strong>Nhân viên P.KTCĐ:</strong> <%= ticket.maintenance_staff %></p>
+                            <p><strong>Tình trạng thiết bị:</strong> <%= ticket.equipment_status %></p>
+                            <p><strong>Nguyên nhân hư hỏng:</strong> <%= ticket.failure_reason %></p>
+                            <% if (ticket.lsx_number) { %>
+                                <p><strong>LSX số:</strong> <%= ticket.lsx_number %></p>
+                            <% } %>
+                            <p><strong>HÌnh ảnh báo hỏng:</strong> <% if (ticket.photo) { %>
+                    <div class="info-item">
+                        <span class="info-label"></span>
+                     <div>
+            <img src="/uploads/<%= ticket.photo %>" alt="Ticket <%= ticket.id %> photo" style="max-width: 200px; border-radius: 5px;">
+        </div>
+    </div>
+<% } %>         
+                        </div>
+                    </details>
+                                        <% if (ticket.status === 'finished') { %>
+                                            <div>
+                                                <h4 style="color: #56ab2f; margin-bottom: 10px;">Thông tin sửa chữa</h4>
+                                                <p><strong>Thời gian hoàn thành:</strong> <%= ticket.completion_time ? new Date(ticket.completion_time).toLocaleString('vi-VN') : 'N/A' %></p>
+                                                <p><strong>Tổng thời gian xử lý:</strong> <%= ticket.total_processing_time || 'N/A' %></p>
+                                                <p><strong>Ghi nhận nguyên nhân:</strong> <%= ticket.cause_recognition || 'N/A' %></p>
+                                                <p><strong>Hướng xử lý:</strong> <%= ticket.solution || 'N/A' %></p>
+                                                <p><strong>Vật tư sử dụng:</strong> <%= ticket.materials_used || 'Không có' %></p>
+                                                <p><strong>Tình trạng sau bảo trì:</strong> <%= ticket.equipment_status_after || 'N/A' %></p>
+                                                <p><strong>Đề nghị khuyến cáo:</strong> <%= ticket.recommendations || 'Không có' %></p>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                    
+                                    <button onclick="viewDetails(<%= ticket.id %>)" class="btn btn-secondary btn-sm" style="margin-top: 15px;">
+                                        Đóng
+                                    </button>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        function viewDetails(id) {
+            const detailsRow = document.getElementById(`details-${id}`);
+            if (detailsRow.style.display === 'none') {
+                detailsRow.style.display = 'table-row';
+            } else {
+                detailsRow.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

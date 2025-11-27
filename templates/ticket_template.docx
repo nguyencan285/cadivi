@@ -1,0 +1,13 @@
+   Ticket ID: {id}
+   Area: {area}
+   Equipment: {equipment}
+   Production Manager: {production_manager}
+   Equipment Staff: {equipment_staff}
+   Maintenance Staff: {maintenance_staff}
+   Work Type: {work_type}
+   Equipment Status: {equipment_status}
+   Failure Reason: {failure_reason}
+   Stop Time: {stop_time}
+   LSX Number: {lsx_number}
+   Status: {status}
+   Created: {created_at}

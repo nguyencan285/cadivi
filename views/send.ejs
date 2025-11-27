@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo Hỏng Thiết Bị</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Quay lại trang chủ</a>
+
+        <div class="form-container">
+            <h1 style="color: #333; text-align: center; margin-bottom: 10px;">Thông tin báo hỏng trong sản xuất</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">* Biểu thị câu hỏi bắt buộc</p>
+
+            <!-- FORM DUY NHẤT -->
+            <form action="/send" method="POST" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="area" class="required">Khu vực</label>
+                    <select id="area" name="area" required>
+                        <option value="">-- Chọn khu vực --</option>
+                        <option value="Kéo">Kéo</option>
+                        <option value="Xoắn">Xoắn</option>
+                        <option value="Bọc">Bọc</option>
+                        <option value="Ghép lõi">Ghép lõi</option>
+                        <option value="Giáp băng">Giáp băng</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="equipment" class="required">Thiết bị</label>
+                    <select type="text" id="equipment" name="equipment" required placeholder="Tên thiết bị">
+                        <option value="">-- Chọn thiết bị --</option>
+                         <option value="LHT-1">LHT-1</option>
+  <option value="LHT-2">LHT-2</option>
+  <option value="LSD">LSD</option>
+  <option value="DA13">DA13</option>
+  <option value="630-1">630-1</option>
+  <option value="SAM">SAM</option>
+  <option value="1250">1250</option>
+  <option value="7/630-1">7/630-1</option>
+  <option value="7/630-2">7/630-2</option>
+  <option value="7/600">7/600</option>
+  <option value="54-1">54-1</option>
+  <option value="54-2">54-2</option>
+  <option value="1+1+3">1+1+3</option>
+  <option value="BOW">BOW</option>
+  <option value="65LT">65LT</option>
+  <option value="751">751</option>
+  <option value="90-1">90-1</option>
+  <option value="90-2">90-2</option>
+  <option value="90-3">90-3</option>
+  <option value="90-4">90-4</option>
+  <option value="LHD">LHD</option>
+  <option value="GB3">GB3</option>
+  <option value="GB2">GB2</option>
+  <option value="GB4">GB4</option>
+  <option value="61S">61S</option>
+  <option value="DRUM">DRUM</option>
+  <option value="150-1">150-1</option>
+  <option value="150-2">150-2</option>
+  <option value="CCVL">CCVL</option>
+  <option value="WG-17">WG-17</option>
+  <option value="75-2">75-2</option>
+                    
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="production_manager" class="required">Quản lý sản xuất</label>
+                    <input type="text" id="production_manager" name="production_manager" required placeholder="Nguyễn Văn A">
+                </div>
+
+                <div class="form-group">
+                    <label for="equipment_staff" class="required">Công nhân vận hành hiết bị</label>
+                    <input type="text" id="equipment_staff" name="equipment_staff" required placeholder="Nguyễn Văn A">
+                </div>
+
+                <div class="form-group">
+                    <label for="maintenance_staff" class="required">Nhân viên P.KTCĐ</label>
+                    <input type="text" id="maintenance_staff" name="maintenance_staff" required placeholder="Nguyễn Văn A">
+                </div>
+
+                <div class="form-group">
+                    <label for="work_type" class="required">Công tác thực hiện</label>
+                    <select id="work_type" name="work_type" required>
+                        <option value="">-- Chọn loại công tác --</option>
+                        <option value="Sửa chữa đột xuất">Sửa chữa đột xuất</option>
+                        <option value="Sửa chữa lớn">Sửa chữa lớn</option>
+                        <option value="Bảo trì định kỳ">Bảo trì định kỳ</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="equipment_status" class="required">Tình trạng thiết bị</label>
+                    <textarea id="equipment_status" name="equipment_status" required placeholder="Không hoạt động được,...."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="failure_reason" class="required">Nguyên nhân hư hỏng</label>
+                    <textarea id="failure_reason" name="failure_reason" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="stop_time" class="required">Thời điểm dừng thiết bị</label>
+                    <input type="datetime-local" id="stop_time" name="stop_time" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lsx_number">Đang triển khai LSX số</label>
+                    <input type="text" id="lsx_number" name="lsx_number">
+                </div>
+
+                <!-- Upload ảnh -->
+                <div class="form-group">
+                    <label for="photo">Tải/Chụp hình:</label>
+                    <input type="file" id="anh" name="anh" accept="image/*" required>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary">Gửi Báo Hỏng</button>
+                    <a href="/" class="btn btn-secondary" style="margin-left: 10px;">Hủy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
