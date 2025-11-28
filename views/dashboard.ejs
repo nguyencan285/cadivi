@@ -34,6 +34,8 @@
     </style>
 </head>
 <body>
+
+   
     <div class="container">
         <a href="/" class="back-link">← Quay lại trang chủ</a>
         
@@ -80,8 +82,8 @@
                             <th>Trạng thái</th>
                             <th>Ngày tạo</th>
                             <th>Thao tác</th>
-                              <th>Sửa</th>
-                              <th>Xuất PDF</th>
+                            <th>Sửa</th>
+                             
                         </tr>
                     </thead>
                     <tbody>
@@ -103,8 +105,12 @@
                                     </button>
                                     <% if (ticket.status === 'finished') { %>
                                         <a href="/print/<%= ticket.id %>" class="btn btn-success btn-sm" style="margin-left: 5px;">
-                                            📄 In
+                                           In BB Dừng
                                         </a>
+                                            <a href="/print/fix/<%= ticket.id %>" class="btn btn-success btn-sm" style="margin-left: 5px;">
+                                            In BB Bàn giao
+                                        </a>
+
                                     <% } %>
                                 </td>
                                 <td>
@@ -164,6 +170,14 @@
                 </table>
             <% } %>
         </div>
+         <div style="margin: 20px 0; text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+
+  <a href="/export/database" 
+     style="display: inline-block; padding: 15px 30px; background: #28a745; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+    💾 Tải xuống toàn bộ Database (Excel)
+  </a>
+ 
+</div>
     </div>
 
     <script>
